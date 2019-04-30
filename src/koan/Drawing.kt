@@ -160,7 +160,7 @@ abstract class Drawing(val width: Int, val height: Int) {
 
     fun save() {
         val filename = this.javaClass.simpleName
-        ImageIO.write(image, "png", File("$filename-$randomSeed.png"))
+        ImageIO.write(image, "png", File("gallery/$filename-$randomSeed.png"))
     }
 
 
