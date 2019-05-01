@@ -54,10 +54,10 @@ class Canvas(val frame: JFrame) : JComponent() {
                         drawing.drawInternal()
                         repaint()
                     }
-                    KeyEvent.VK_INSERT -> drawing.save()
+                    KeyEvent.VK_SLASH -> drawing.save()
                     KeyEvent.VK_ENTER -> reloadDrawing()
-                    KeyEvent.VK_PAGE_UP -> previousDrawing()
-                    KeyEvent.VK_PAGE_DOWN -> nextDrawing()
+                    KeyEvent.VK_LEFT -> previousDrawing()
+                    KeyEvent.VK_RIGHT -> nextDrawing()
                     else -> {
                         if (drawing.keyPressed(e)) {
                             drawing.drawInternal()
@@ -86,8 +86,6 @@ class Canvas(val frame: JFrame) : JComponent() {
         val url = javaClass.getResource("")
         val stuffPath = Paths.get(url.toURI())
         val drawingsPath = stuffPath.parent.resolve("drawings")
-
-        val fileNames = ArrayList<String>()
 
         val classMatcher = FileSystems.getDefault().getPathMatcher("glob:**.class");
 
