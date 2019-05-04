@@ -11,7 +11,7 @@ class Example6_shapes : Drawing(480, 720) {
 
     // Create a right-angled triangle, with the
     // origin at the center of the hypotenuse.
-    val triangle = Shape(
+    val triangle = Polygon(
         listOf(
             Point(-HALF_SIZE, -HALF_SIZE),
             Point(HALF_SIZE, -HALF_SIZE),
