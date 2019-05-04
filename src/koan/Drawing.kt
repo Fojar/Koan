@@ -156,10 +156,12 @@ abstract class Drawing(val width: Int, val height: Int) {
         graphics.color = Color(c.red, c.green, c.blue, alpha)
     }
 
-    protected fun color(c: Color) = graphics.setColor(c)
+    protected fun color(c: Color) = setRGB(c.red, c.green, c.blue)
 
-    protected fun color(red: Double, green: Double, blue: Double) =
-        graphics.setColor(Color(red.toFloat(), green.toFloat(), blue.toFloat()))
+    private fun setRGB(red: Int, green: Int, blue: Int) {
+        val c = graphics.color
+        graphics.color = Color(red, green, blue, c.alpha)
+    }
 
 
     fun save() {
