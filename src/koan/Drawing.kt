@@ -171,6 +171,11 @@ abstract class Drawing(val width: Int, val height: Int) {
     protected fun popTransform() {
         if (transformStack.isNotEmpty()) graphics.transform = transformStack.pop()
     }
+
+    fun drawShape(shape: Shape) = graphics.draw(shape.path)
+    fun fillShape(shape: Shape) = graphics.fill(shape.path)
+
+
 }
 
 
