@@ -118,6 +118,10 @@ abstract class Drawing(val width: Int, val height: Int) {
         graphics.transform = t
     }
 
+    fun clear(color: Color)  {
+        graphics.background = color
+        clear()
+    }
 
     fun resetInternal() {
         graphics.transform = originalTransform
