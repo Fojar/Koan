@@ -35,16 +35,14 @@ class Example7_flowers : Drawing(1200, 400) {
         val PETALS = rint(5..13)
 
         val CENTRAL_WIDTH = rand(20, 70)
-        val LENGTH = rand(150, 190)
+        val PETAL_LENGTH = rand(150, 190)
 
         val ROTATION = rand(TAU)
 
         val HUE_OFFSET = rand()
         val HUE_RANGE = rand(-.2, .2)
 
-        val PHASE = rand(TAU)
-        val FREQUENCY = rand(.1)
-        val WOBBLE = rand(7)
+        val wobble = SineWave(rand(.1), rand(7), rand(TAU))
 
         val PETAL_TAPER = rand(.5, 2)
         val PETAL_CURVE = rand(.2, .8)
@@ -56,9 +54,9 @@ class Example7_flowers : Drawing(1200, 400) {
             return CENTRAL_WIDTH * (taper..curve).lerp(PETAL_CURVE)
         }
 
-        for (x in 0..LENGTH step 2) {
+        for (x in 0..PETAL_LENGTH step 2) {
 
-            val q = x / LENGTH
+            val q = x / PETAL_LENGTH
 
             for (petal in 0 until PETALS) {
 
@@ -67,7 +65,8 @@ class Example7_flowers : Drawing(1200, 400) {
 
                 color(hsv(HUE_OFFSET + HUE_RANGE * q, .8, .7))
 
-                val y = sin(PHASE + x * FREQUENCY) * WOBBLE
+                val y = wobble(x)
+
                 drawCircle(Point(x, y), petalWidth(q))
                 popTransform()
             }

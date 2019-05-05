@@ -21,13 +21,13 @@ class Example8_smokes : Drawing(1200, 800) {
         val hue = rand()
 
         val xPerturb = sum(
-            waveFunction(frequency(rand(2, 8)), rand(4, 16), rand(TAU)),
-            waveFunction(frequency(rand(8, 16)), rand(2, 8), rand(TAU))
+            SineWave(frequency(rand(2, 8)), rand(4, 16), rand(TAU)),
+            SineWave(frequency(rand(8, 16)), rand(2, 8), rand(TAU))
         )
 
         val yPerturb = sum(
-            waveFunction(frequency(rand(2, 8)), rand(4, 16), rand(TAU)),
-            waveFunction(frequency(rand(8, 16)), rand(2, 8), rand(TAU))
+            SineWave(frequency(rand(2, 8)), rand(4, 16), rand(TAU)),
+            SineWave(frequency(rand(8, 16)), rand(2, 8), rand(TAU))
         )
 
         fun smokeRadius(q: Double) = 1 + q.pow(2.5) * maxWidth
