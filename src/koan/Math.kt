@@ -23,3 +23,8 @@ fun wavelength(λ: Double) = TAU / λ
 fun sum(vararg waveFuncs: (Double) -> Double): (Double) -> Double {
     return { z: Double -> waveFuncs.sumByDouble { wf -> wf(z) } }
 }
+
+// This version of the SineWave takes a lambda for the phase parameter, allowing it to be animated over time.
+fun PhasingSineWave(cycleScaleFunc: Double, amplitude: Double, phaseFunc: (Double) -> Double): (Double) -> Double {
+    return { sin(phaseFunc(it) + cycleScaleFunc * it) * amplitude }
+}
