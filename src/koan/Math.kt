@@ -16,8 +16,9 @@ fun SineWave(cycleScale: Double, amplitude: Double, phase: Double = 0.0): (Doubl
 
 // Functions for defining the cycle of a wave.
 fun frequency(f: Double) = TAU * f
-
+fun frequency(f: Int) = frequency(f.toDouble())
 fun wavelength(λ: Double) = TAU / λ
+fun wavelength(λ: Int) = wavelength(λ.toDouble())
 
 // Creates a function that yields the sum of the outputs of several wave functions.
 fun sum(vararg waveFuncs: (Double) -> Double): (Double) -> Double {
@@ -28,3 +29,8 @@ fun sum(vararg waveFuncs: (Double) -> Double): (Double) -> Double {
 fun PhasingSineWave(cycleScaleFunc: Double, amplitude: Double, phaseFunc: (Double) -> Double): (Double) -> Double {
     return { sin(phaseFunc(it) + cycleScaleFunc * it) * amplitude }
 }
+
+
+// Creates a Gaussain function with the given parameters and a height of 1.
+fun Gaussian(centre: Double, deviation: Double) =
+    { x: Double -> exp(-(x - centre).pow(2) / (2 * deviation.pow(2))) }
