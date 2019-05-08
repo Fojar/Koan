@@ -27,3 +27,14 @@ hs_err_pid*
 build/
 .idea/
 out/
+
+# Build
+.classpath
+.project
+
+# Binaries
+bin/
+*.out
+
+# VS Code
+.settings
