@@ -26,7 +26,6 @@ class Canvas(val frame: JFrame) : JComponent() {
             val d = Dimension(drawing.width, drawing.height)
             size = d
             preferredSize = d
-            drawing.clear()
             repaint()
 
             SwingUtilities.invokeLater {

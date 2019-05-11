@@ -1,5 +1,7 @@
 package koan
 
+import java.lang.Math.hypot
+
 data class Point(val x: Double, val y: Double) {
     operator fun times(c: Int) = Point(c * x, c * y)
     operator fun times(c: Double) = Point(c * x, c * y)
@@ -11,6 +13,7 @@ data class Point(val x: Double, val y: Double) {
     constructor(x: Double, y: Int) : this(x, y.toDouble())
     constructor(x: Int, y: Double) : this(x.toDouble(), y)
 
+    infix fun distanceTo(other: Point) = hypot(x - other.x, y - other.y)
 
     companion object {
         val ZERO = Point(0, 0)
