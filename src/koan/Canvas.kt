@@ -6,26 +6,27 @@ import java.awt.Graphics2D
 import java.awt.RenderingHints
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
+import java.nio.file.FileSystems
+import java.nio.file.Files
+import java.nio.file.Paths
 import javax.swing.JComponent
 import javax.swing.JFrame
-import java.nio.file.*
-import java.util.ArrayList
 import javax.swing.SwingUtilities
 import kotlin.streams.asSequence
 
 class Canvas(val frame: JFrame) : JComponent() {
 
-    val drawingsClasses = getListOfClassesInDrawingsPackage()
-    var currentDrawingIndex = 0
+    private var currentDrawingClassName: String = ""
 
-    val defaultDrawing = DefaultDrawing()
+    private val defaultDrawing = DefaultDrawing()
 
-    var drawing: Drawing = defaultDrawing
+    private var currentDrawing: Drawing = defaultDrawing
         set(drawing) {
             field = drawing
             val d = Dimension(drawing.width, drawing.height)
             size = d
             preferredSize = d
+            drawing.resetInternal()
             repaint()
 
             SwingUtilities.invokeLater {
@@ -34,7 +35,7 @@ class Canvas(val frame: JFrame) : JComponent() {
             }
         }
 
-    val parentClassLoader = javaClass.classLoader
+    private val parentClassLoader = javaClass.classLoader
 
     init {
 
@@ -44,22 +45,12 @@ class Canvas(val frame: JFrame) : JComponent() {
             override fun keyPressed(e: KeyEvent) {
 
                 when (e.keyCode) {
-                    KeyEvent.VK_SPACE -> {
-                        drawing.drawInternal()
-                        repaint()
-                    }
-                    KeyEvent.VK_BACK_SPACE -> {
-                        drawing.resetInternal()
-                        drawing.drawInternal()
-                        repaint()
-                    }
-                    KeyEvent.VK_SLASH -> drawing.save()
-                    KeyEvent.VK_ENTER -> reloadDrawing()
-                    KeyEvent.VK_LEFT -> previousDrawing()
-                    KeyEvent.VK_RIGHT -> nextDrawing()
+                    KeyEvent.VK_BACK_SPACE -> reloadDrawing()
+                    KeyEvent.VK_ENTER -> resetDrawing()
+                    KeyEvent.VK_SPACE -> drawDrawing()
                     else -> {
-                        if (drawing.keyPressed(e)) {
-                            drawing.drawInternal()
+                        if (currentDrawing.keyPressed(e)) {
+                            currentDrawing.drawInternal()
                             repaint()
                         }
                     }
@@ -70,65 +61,33 @@ class Canvas(val frame: JFrame) : JComponent() {
     }
 
 
-    fun nextDrawing() {
-        currentDrawingIndex = (currentDrawingIndex + 1) % drawingsClasses.size
-        reloadDrawing()
+    fun saveDrawing() {
+        currentDrawing.save()
     }
 
-    fun previousDrawing() {
-        currentDrawingIndex = (currentDrawingIndex + drawingsClasses.size - 1) % drawingsClasses.size
-        reloadDrawing()
+    fun drawDrawing() {
+        currentDrawing.drawInternal()
+        repaint()
     }
 
-
-    fun getListOfClassesInDrawingsPackage(): MutableList<String> {
-        val url = javaClass.getResource("")
-        val stuffPath = Paths.get(url.toURI())
-        val drawingsPath = stuffPath.parent.resolve("drawings")
-
-        val classMatcher = FileSystems.getDefault().getPathMatcher("glob:**.class");
-
-        return Files.list(drawingsPath).asSequence()
-            .filter { !it.toString().contains('$') && classMatcher.matches(it) }
-            .map { it.fileName.toString().substringBeforeLast('.') }
-            .sorted()
-            .toMutableList()
-    }
-
-
-    fun getNewCurrentDrawing(): Drawing {
-
-        if (drawingsClasses.isEmpty()) return defaultDrawing
-
-        try {
-
-            while (!drawingsClasses.isEmpty()) {
-                val className = drawingsClasses[currentDrawingIndex]
-                frame.title = className
-
-                val drawingClass = DrawingClassLoader(parentClassLoader).loadClass("drawings.$className")
-                val thing = drawingClass.getConstructor().newInstance()
-
-                if (thing is Drawing) {
-                    thing.resetInternal()
-                    return thing
-                } else {
-                    println("Removing non-Drawing class: $className.")
-                    drawingsClasses.removeAt(currentDrawingIndex)
-                    if (currentDrawingIndex == drawingsClasses.size) currentDrawingIndex = 0
-                }
-            }
-
-        } catch (ex: Exception) {
-            ex.cause?.printStackTrace()
-        }
-
-        return defaultDrawing
+    fun resetDrawing() {
+        currentDrawing.resetInternal()
+        drawDrawing()
     }
 
     fun reloadDrawing() {
 
-        drawing = getNewCurrentDrawing()
+        val drawing = getNewCurrentDrawing()
+
+        val drawingName = currentDrawingClassName.replace('.', '/')
+
+        if (drawing != null) {
+            currentDrawing = drawing
+            frame.title = drawingName
+        } else {
+            frame.title = "$drawingName [Invalid]"
+            currentDrawing = defaultDrawing
+        }
         frame.pack()
     }
 
@@ -138,12 +97,43 @@ class Canvas(val frame: JFrame) : JComponent() {
             setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
             drawImage(
-                drawing.image,
-                0, 0, width, height,
-                0, 0, drawing.width * drawing.sizeFactor, drawing.height * drawing.sizeFactor,
+                currentDrawing.image,
+                0,
+                0,
+                width,
+                height,
+                0,
+                0,
+                currentDrawing.width * currentDrawing.sizeFactor,
+                currentDrawing.height * currentDrawing.sizeFactor,
                 null
             );
         }
     }
+
+    fun loadDrawing(className: String) {
+        currentDrawingClassName = className
+        reloadDrawing()
+    }
+
+    fun getNewCurrentDrawing(): Drawing? {
+
+        try {
+
+            val drawingClass = DrawingClassLoader(parentClassLoader)
+                .loadClass("drawings.$currentDrawingClassName")
+
+            val thing = drawingClass.getConstructor().newInstance()
+
+            if (thing is Drawing) {
+                return thing
+            }
+        } catch (ex: Exception) {
+            ex.cause?.printStackTrace()
+        }
+
+        return null
+    }
+
 
 }
