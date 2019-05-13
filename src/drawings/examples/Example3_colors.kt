@@ -1,7 +1,6 @@
-package drawings
+package drawings.examples
 
 import koan.*
-import kotlin.math.*
 
 class Example3_colors : Drawing(600, 400) {
 

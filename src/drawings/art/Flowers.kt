@@ -1,9 +1,9 @@
-package drawings
+package drawings.art
 
 import koan.*
 import kotlin.math.*
 
-class Example7_flowers : Drawing(1200, 400) {
+class Flowers : Drawing(1200, 400) {
 
     override fun reset() {
         opacity(.2)

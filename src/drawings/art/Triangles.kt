@@ -1,8 +1,8 @@
-package drawings
+package drawings.art
 
 import koan.*
 
-class Example6_shapes : Drawing(480, 720) {
+class Triangles : Drawing(480, 720) {
 
     // The length of the side of the squares in the drawing.
     // Each square will contain a colored triangle.

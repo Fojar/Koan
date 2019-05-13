@@ -1,4 +1,4 @@
-package drawings
+package drawings.examples
 
 import koan.*
 import kotlin.math.*

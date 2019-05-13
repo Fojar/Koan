@@ -1,9 +1,9 @@
-package drawings
+package drawings.art
 
 import koan.*
 import kotlin.math.*
 
-class Example9_animated_smoke : Drawing(300, 800) {
+class Smoke_animated : Drawing(300, 800) {
 
     // This class stores a phase and can vary it at a constant rate.
     // The rate is chosen randomly from the given range.

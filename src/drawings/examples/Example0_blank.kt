@@ -1,12 +1,11 @@
-package drawings
+package drawings.examples
 
 import koan.*
 import kotlin.math.*
 
-// Defines a drawing that is 500 by 500 pixels in size.
+// Copy this file to start a new blank drawing!
 class Example0_blank : Drawing(500, 500) {
 
-    // This function draws your drawing!
     override fun draw() {
 
         // Put your code here! Check the other examples to

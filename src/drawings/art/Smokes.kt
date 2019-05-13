@@ -1,9 +1,9 @@
-package drawings
+package drawings.art
 
 import koan.*
 import kotlin.math.*
 
-class Example8_smokes : Drawing(1200, 800) {
+class Smokes : Drawing(1200, 800) {
 
     override fun draw() {
 
