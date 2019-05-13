@@ -22,6 +22,6 @@ compileTestKotlin {
 }
 
 task(run, dependsOn: 'classes', type: JavaExec) {
-    main = 'MainKt'
+    main = 'koan.MainKt'
     classpath = sourceSets.main.runtimeClasspath
 }
