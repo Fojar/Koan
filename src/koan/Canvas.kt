@@ -19,7 +19,7 @@ class Canvas(val frame: JFrame) : JComponent() {
     private var currentDrawing: Drawing = defaultDrawing
         set(drawing) {
             field = drawing
-            val d = Dimension(drawing.width, drawing.height)
+            val d = Dimension(drawing.canvas.width, drawing.canvas.height)
             size = d
             preferredSize = d
             drawing.resetInternal()
@@ -102,8 +102,8 @@ class Canvas(val frame: JFrame) : JComponent() {
                 height,
                 0,
                 0,
-                currentDrawing.width * currentDrawing.sizeFactor,
-                currentDrawing.height * currentDrawing.sizeFactor,
+                currentDrawing.canvas.width * currentDrawing.sizeFactor,
+                currentDrawing.canvas.height * currentDrawing.sizeFactor,
                 null
             );
         }

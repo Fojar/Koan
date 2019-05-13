@@ -9,7 +9,7 @@ class Smokes : Drawing(1200, 800) {
 
         val COLUMNS = 7
         for (x in 0 until COLUMNS) {
-            drawSmoke(width * (x + 1.0) / (COLUMNS + 1), height * .9)
+            drawSmoke(canvas.width * (x + 1.0) / (COLUMNS + 1), canvas.height * .9)
         }
     }
 

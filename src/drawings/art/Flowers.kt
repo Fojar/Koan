@@ -20,8 +20,8 @@ class Flowers : Drawing(1200, 400) {
 
                 pushTransform()
                 translate(
-                    width * (x + .5) / COLUMNS,
-                    height * (y + .5) / ROWS
+                    canvas.width * (x + .5) / COLUMNS,
+                    canvas.height * (y + .5) / ROWS
                 )
 
                 drawFlower()

@@ -24,7 +24,7 @@ class Example4_randomness : Drawing(600, 400) {
         repeat(5) {
 
             // Make a random point somewhere on the canvas.
-            val p = Point(rand(width), rand(height))
+            val p = Point(rand(canvas.width), rand(canvas.height))
 
             // Here's how to get a random number in a given range:
             val radius = rand(3, 13)

@@ -10,10 +10,18 @@ import javax.imageio.ImageIO
 import kotlin.math.*
 import java.util.Deque
 
-abstract class Drawing(val width: Int, val height: Int) {
+data class CanvasSpec(val width: Int, val height: Int) {
 
-    val halfWidth = width / 2.0
-    val halfHeight = height / 2.0
+    val halfWidth: Double = width / 2.0
+    val halfHeight: Double = height / 2.0
+
+    val size = Point(width, height)
+    val centre = Point(halfWidth, halfHeight)
+}
+
+abstract class Drawing(width: Int, height: Int) {
+
+    val canvas: CanvasSpec = CanvasSpec(width, height)
 
     val sizeFactor: Int = 1
 
@@ -27,8 +35,6 @@ abstract class Drawing(val width: Int, val height: Int) {
     private val line = Line2D.Double()
     private val ellipse = Ellipse2D.Double()
     private val rectangle = Rectangle2D.Double()
-
-    val RNG = Random()
 
     init {
 
@@ -114,7 +120,7 @@ abstract class Drawing(val width: Int, val height: Int) {
     fun clear() {
         val t = graphics.transform
         graphics.transform = originalTransform
-        graphics.clearRect(0, 0, width, height)
+        graphics.clearRect(0, 0, canvas.width, canvas.height)
         graphics.transform = t
     }
 

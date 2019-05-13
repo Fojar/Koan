@@ -8,7 +8,7 @@ class Example2_circles : Drawing(600, 400) {
     override fun draw() {
 
         // The var keyword creates a variable that can be changed.
-        var c = Point(width / 3, height / 2)
+        var c = Point(canvas.width / 3, canvas.height / 2)
 
         // The second parameter for the drawCircle function is the radius.
         drawCircle(c, 50)
