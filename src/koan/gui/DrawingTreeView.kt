@@ -75,7 +75,7 @@ class DrawingTreeView(changeHandler: (className: String) -> Unit) : JScrollPane(
 
         val dirNodes = ArrayDeque<DefaultMutableTreeNode>()
 
-        Files.walkFileTree(Resources.drawingsPath, emptySet(), 2, object : SimpleFileVisitor<Path>() {
+        Files.walkFileTree(Resources.drawingsPath, emptySet(), 3, object : SimpleFileVisitor<Path>() {
 
             override fun visitFile(path: Path, attrs: BasicFileAttributes): FileVisitResult {
                 val filename = path.fileName.toString()

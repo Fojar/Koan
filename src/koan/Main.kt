@@ -1,11 +1,34 @@
-import koan.Canvas
-import koan.Matte
+package koan
+
 import koan.gui.DrawingTreeView
-import java.awt.*
+import java.awt.BorderLayout
+import java.awt.Color
+import java.awt.Dimension
+import java.awt.Font
+import java.awt.GridLayout
 import java.awt.event.ActionEvent
+import java.io.OutputStream
+import java.io.PrintStream
 import javax.swing.*
 
+
+private val consoleTextArea: JTextArea = JTextArea(8, 50).apply {
+    background = Color.DARK_GRAY
+    foreground = Color.WHITE
+    font = Font(Font.MONOSPACED, Font.PLAIN, 15)
+}
+
+fun clearConsole() {
+    consoleTextArea.text = ""
+}
+
 fun main() {
+
+    System.setOut(PrintStream(object : OutputStream() {
+        override fun write(b: Int) {
+            consoleTextArea.append(b.toChar().toString())
+        }
+    }))
 
     val canvas: Canvas
 
@@ -31,6 +54,23 @@ fun main() {
 
     val controlPanel = JFrame().apply {
 
+        val drawingBrowser = JPanel().apply {
+
+            val drawingTree = DrawingTreeView {
+                canvas.loadDrawing(it)
+            }
+
+            addButton("Refresh directories") {
+                drawingTree.refreshModel()
+            }
+            add(JLabel("Select drawing:"))
+
+            add(drawingTree)
+            layout = BoxLayout(this, BoxLayout.Y_AXIS)
+            preferredSize = Dimension(250, 400)
+        }
+        contentPane.add(drawingBrowser, BorderLayout.CENTER)
+
         val buttonsPanel = JPanel().apply {
             layout = GridLayout(4, 1)
 
@@ -50,34 +90,10 @@ fun main() {
         }
         contentPane.add(buttonsPanel, BorderLayout.EAST)
 
-
-        val drawingBrowser = JPanel().apply {
-
-            val drawingTree = DrawingTreeView {
-                canvas.loadDrawing(it)
-            }
-
-            addButton("Refresh directories") {
-                drawingTree.refreshModel()
-            }
-            add(JLabel("Select drawing:"))
-
-            add(drawingTree)
-            layout = BoxLayout(this, BoxLayout.Y_AXIS)
-            preferredSize = Dimension(250, 400)
-        }
-        contentPane.add(drawingBrowser, BorderLayout.CENTER)
-
         val consolePanel = JPanel().apply {
-
-            add(JTextArea().apply {
-                text = "Welcome to Koan."
-            })
-
-            preferredSize = Dimension(0, 150)
+            add(JScrollPane(consoleTextArea))
         }
         contentPane.add(consolePanel, BorderLayout.PAGE_END)
-
 
         pack()
         title = "Koan Control Panel"
@@ -87,13 +103,13 @@ fun main() {
     }
 
     with(frame) {
-        location = Point(controlPanel.width, 0)
+        location = java.awt.Point(controlPanel.width, 0)
         isVisible = true
     }
 
 }
 
-fun JPanel.addButton(title: String, clickHandler: (ActionEvent) -> Unit) {
+private fun JPanel.addButton(title: String, clickHandler: (ActionEvent) -> Unit) {
     add(JButton(title).apply {
         addActionListener(clickHandler)
     })

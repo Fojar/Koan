@@ -6,13 +6,9 @@ import java.awt.Graphics2D
 import java.awt.RenderingHints
 import java.awt.event.KeyAdapter
 import java.awt.event.KeyEvent
-import java.nio.file.FileSystems
-import java.nio.file.Files
-import java.nio.file.Paths
 import javax.swing.JComponent
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
-import kotlin.streams.asSequence
 
 class Canvas(val frame: JFrame) : JComponent() {
 
@@ -83,9 +79,11 @@ class Canvas(val frame: JFrame) : JComponent() {
 
         if (drawing != null) {
             currentDrawing = drawing
-            frame.title = drawingName
+            frame.title = "Koan drawing: $drawingName"
+            clearConsole()
+            println("Drawing $drawingName loaded.")
         } else {
-            frame.title = "$drawingName [Invalid]"
+            frame.title = "Koan drawing: $drawingName [Invalid]"
             currentDrawing = defaultDrawing
         }
         frame.pack()
