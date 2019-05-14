@@ -10,7 +10,7 @@ class Triangles : Drawing(480, 720) {
     val HALF_SIZE = SIZE / 2
 
     // Create a right-angled triangle, with the
-    // origin at the center of the hypotenuse.
+    // origin at the centre of the hypotenuse.
     val triangle = Polygon(
         listOf(
             Point(-HALF_SIZE, -HALF_SIZE),

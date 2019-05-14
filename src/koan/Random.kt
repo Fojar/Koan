@@ -23,6 +23,8 @@ fun rand() = RNG.nextDouble()
 fun rand(max: Double) = RNG.nextDouble(max)
 fun rand(max: Int) = RNG.nextDouble(max.toDouble())
 
+fun rand(p: Point) = Point(rand(p.x), rand(p.y))
+
 fun rand(min: Double, max: Double) = RNG.nextDouble(min, max)
 fun rand(min: Int, max: Int) = RNG.nextDouble(min.toDouble(), max.toDouble())
 fun rand(min: Int, max: Double) = RNG.nextDouble(min.toDouble(), max)

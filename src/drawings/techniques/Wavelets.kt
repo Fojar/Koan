@@ -3,7 +3,7 @@ package drawings.techniques
 import koan.*
 import kotlin.math.*
 
-class Wavelets : Drawing(600, 600) {
+class Wavelets : Drawing(500, 500) {
 
     override fun draw() {
 

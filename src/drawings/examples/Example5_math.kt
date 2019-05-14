@@ -7,7 +7,7 @@ class Example5_math : Drawing(600, 400) {
 
     override fun reset() {
 
-        // If you prefer your origin at the center of the canvas,
+        // If you prefer your origin at the centre of the canvas,
         // With y-coordinates increasing upward, you can have that!
         translate(canvas.halfWidth, canvas.halfHeight)
         scale(1, -1)

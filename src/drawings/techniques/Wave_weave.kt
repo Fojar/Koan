@@ -3,7 +3,7 @@ package drawings.techniques
 import koan.*
 import kotlin.math.*
 
-class Waveweave : Drawing(500, 500) {
+class Wave_weave : Drawing(500, 500) {
 
     override fun draw() {
 
@@ -15,11 +15,11 @@ class Waveweave : Drawing(500, 500) {
 
         // Add a fuzzy white fringe around the edges of the canvas.
         color(WHITE)
-        opacity(.2)
+        opacity(.1)
 
         for (step in 5 downTo 1) {
             val radius = step * 5
-            repeat(1000) {
+            repeat(500) {
                 drawCircle(Point(0, rand(canvas.height)), rand(radius))
                 drawCircle(Point(canvas.width, rand(canvas.height)), rand(radius))
                 drawCircle(Point(rand(canvas.width), 0), rand(radius))
