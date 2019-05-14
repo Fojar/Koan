@@ -46,9 +46,9 @@ class Waveweave : Drawing(500, 500) {
         val bias = rand(-1, 1) * .5
 
         // The vertical distance between each wave.
-        val spacing = 30
+        val spacing = 10 * height.pow(.5)
 
-        for (y in -rint(spacing)..canvas.height + spacing step spacing) {
+        for (y in -rand(spacing)..canvas.height + spacing step spacing) {
 
             // This affects the entire wave.
             stroke(rand(.5, 1.5))

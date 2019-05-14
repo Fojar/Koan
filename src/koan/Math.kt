@@ -21,8 +21,8 @@ fun wavelength(λ: Double) = TAU / λ
 fun wavelength(λ: Int) = wavelength(λ.toDouble())
 
 // Creates a function that yields the sum of the outputs of several wave functions.
-fun sum(vararg waveFuncs: (Double) -> Double): (Double) -> Double {
-    return { z: Double -> waveFuncs.sumByDouble { wf -> wf(z) } }
+fun sum(vararg funcs: (Double) -> Double): (Double) -> Double {
+    return { z: Double -> funcs.sumByDouble { wf -> wf(z) } }
 }
 
 // This version of the SineWave takes a lambda for the phase parameter, allowing it to be animated over time.
@@ -30,7 +30,9 @@ fun PhasingSineWave(cycleScaleFunc: Double, amplitude: Double, phaseFunc: (Doubl
     return { sin(phaseFunc(it) + cycleScaleFunc * it) * amplitude }
 }
 
-
 // Creates a Gaussain function with the given parameters and a height of 1.
 fun Gaussian(centre: Double, deviation: Double) =
     { x: Double -> exp(-(x - centre).pow(2) / (2 * deviation.pow(2))) }
+
+fun Int.pow(x: Int) = this.toDouble().pow(x)
+fun Int.pow(x: Double) = this.toDouble().pow(x)
