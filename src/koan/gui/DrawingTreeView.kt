@@ -73,6 +73,7 @@ class DrawingTreeView(changeHandler: (className: String) -> Unit) : JScrollPane(
 
     private fun availableDrawings(): TreeModel {
 
+        // A stack of directory nodes built as we walk the file tree.
         val dirNodes = ArrayDeque<DefaultMutableTreeNode>()
 
         Files.walkFileTree(Resources.drawingsPath, emptySet(), 3, object : SimpleFileVisitor<Path>() {
@@ -92,10 +93,14 @@ class DrawingTreeView(changeHandler: (className: String) -> Unit) : JScrollPane(
             }
 
             override fun postVisitDirectory(dir: Path, exc: IOException?): FileVisitResult {
+
+                dirNodes.peek().sortContentsByType()
+
                 if (dirNodes.size > 1) {
                     val finishedDir = dirNodes.pop()
                     if (finishedDir.childCount > 0) dirNodes.peek().add(finishedDir)
                 }
+
                 return FileVisitResult.CONTINUE
             }
 
@@ -106,11 +111,27 @@ class DrawingTreeView(changeHandler: (className: String) -> Unit) : JScrollPane(
 
 }
 
-class DrawingClassNode(drawingClassPath: Path) {
+fun DefaultMutableTreeNode.sortContentsByType() {
 
+    if (childCount == 0) return
+
+    val dirs = mutableListOf<DefaultMutableTreeNode>()
+    val files = mutableListOf<DefaultMutableTreeNode>()
+
+    for (child in children() as Enumeration<DefaultMutableTreeNode>) {
+        (if (child.userObject is DrawingClassNode) files else dirs).add(child)
+    }
+
+    removeAllChildren()
+    dirs.forEach { add(it) }
+    files.forEach { add(it) }
+}
+
+class DrawingClassNode(drawingClassPath: Path) : Comparable<DrawingClassNode> {
     val qualifiedClassName = Resources.toClassName(drawingClassPath)
     val simpleName = drawingClassPath.fileName.toString().removeSuffix(".class")
 
     override fun toString() = simpleName
+    override fun compareTo(other: DrawingClassNode) = simpleName.compareTo(other.simpleName)
 }
 
