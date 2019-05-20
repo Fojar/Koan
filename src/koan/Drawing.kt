@@ -157,6 +157,10 @@ abstract class Drawing(width: Int, height: Int) {
     protected fun opacity(value: Double) = setAlpha((value.coerceIn(0.0, 1.0) * 255).toInt());
     protected fun opacity(value: Int) = setAlpha(value.coerceIn(0, 1) * 255);
 
+    protected fun blendingMode(blendingMode: BlendingMode) {
+        graphics.composite = blendingMode.composite
+    }
+
     private fun setAlpha(alpha: Int) {
         val c = graphics.color
         graphics.color = Color(c.red, c.green, c.blue, alpha)
