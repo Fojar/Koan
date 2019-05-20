@@ -57,6 +57,7 @@ abstract class Drawing(width: Int, height: Int) {
 
     protected fun translate(tx: Double, ty: Double) = graphics.translate(tx, ty)
     protected fun translate(tx: Int, ty: Int) = graphics.translate(tx, ty)
+    protected fun translate(point: Point) = translate(point.x, point.y)
 
     protected fun scale(s: Double) = graphics.scale(s, s)
     protected fun scale(s: Int) = scale(s.toDouble())

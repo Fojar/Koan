@@ -4,6 +4,12 @@ import kotlin.math.*
 
 const val TAU = PI * 2
 
+typealias Real = Double
+
+
+fun angleToPoint(theta: Double) = Point(cos(theta), sin(theta))
+fun angleToPoint(theta: Int) = Point(cos(theta.toDouble()), sin(theta.toDouble()))
+
 
 fun ClosedRange<Double>.lerp(t: Double) = start + (endInclusive - start) * t
 fun ClosedRange<Double>.lerp(t: Int) = start + (endInclusive - start) * t
@@ -20,7 +26,7 @@ fun frequency(f: Int) = frequency(f.toDouble())
 fun wavelength(λ: Double) = TAU / λ
 fun wavelength(λ: Int) = wavelength(λ.toDouble())
 
-// Creates a function that yields the sum of the outputs of several wave functions.
+// Creates a function that yields the sum of the outputs of several other functions.
 fun sum(vararg funcs: (Double) -> Double): (Double) -> Double {
     return { z: Double -> funcs.sumByDouble { wf -> wf(z) } }
 }
