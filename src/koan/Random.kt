@@ -1,5 +1,8 @@
 package koan
 
+import java.io.File
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 import kotlin.random.nextInt
 import kotlin.random.nextULong
@@ -8,10 +11,14 @@ var randomSeed: ULong = Random.Default.nextULong()
     set (newSeed) {
         field = newSeed
         RNG = Random(newSeed.toLong())
+        val timestamp = LocalDateTime.now().format(dateTimeFormatter)
+        seedLog.appendText("$timestamp ~ $newSeed" + System.lineSeparator())
     }
 
 private var RNG: Random = Random(randomSeed.toLong())
 
+private val seedLog = File("seed.log")
+private val dateTimeFormatter = DateTimeFormatter.ofPattern("yyy-MM-dd HH:mm:ss")
 
 fun reseedRNG() {
     randomSeed = Random.Default.nextULong()
