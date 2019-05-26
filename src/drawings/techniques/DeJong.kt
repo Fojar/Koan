@@ -28,7 +28,7 @@ class DeJong : Drawing(500, 500) {
         var p = Point(rand(-2, 2), rand(-2, 2))
         repeat(10000) {
             p = deJong(p)
-            fillCircle(p * zoom, 1)
+            fillCircle(p * zoom, .5)
         }
     }
 
