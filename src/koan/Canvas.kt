@@ -78,10 +78,10 @@ class Canvas(val frame: JFrame) : JComponent() {
         val drawingName = currentDrawingClassName.replace('.', '/')
 
         if (drawing != null) {
-            currentDrawing = drawing
-            frame.title = "Koan drawing: $drawingName"
             clearConsole()
             println("Drawing $drawingName loaded.")
+            frame.title = "Koan drawing: $drawingName"
+            currentDrawing = drawing
         } else {
             frame.title = "Koan drawing: $drawingName [Invalid]"
             currentDrawing = defaultDrawing
