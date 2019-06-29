@@ -55,24 +55,23 @@ abstract class Drawing(width: Int, height: Int) {
 
     open fun keyPressed(e: KeyEvent) = false
 
-    protected fun translate(tx: Double, ty: Double) = graphics.translate(tx, ty)
-    protected fun translate(tx: Int, ty: Int) = graphics.translate(tx, ty)
-    protected fun translate(point: Point) = translate(point.x, point.y)
+    fun translate(tx: Double, ty: Double) = graphics.translate(tx, ty)
+    fun translate(tx: Int, ty: Int) = graphics.translate(tx, ty)
+    fun translate(point: Point) = translate(point.x, point.y)
 
-    protected fun scale(s: Double) = graphics.scale(s, s)
-    protected fun scale(s: Int) = scale(s.toDouble())
+    fun scale(s: Double) = graphics.scale(s, s)
+    fun scale(s: Int) = scale(s.toDouble())
 
     fun scale(sx: Double, sy: Double) = graphics.scale(sx, sy)
     fun scale(sx: Int, sy: Double) = graphics.scale(sx.toDouble(), sy)
     fun scale(sx: Double, sy: Int) = graphics.scale(sx, sy.toDouble())
     fun scale(sx: Int, sy: Int) = graphics.scale(sx.toDouble(), sy.toDouble())
 
+    fun rotate(theta: Double) = graphics.rotate(theta)
+    fun rotate(theta: Int) = graphics.rotate(theta.toDouble())
 
-    protected fun rotate(theta: Double) = graphics.rotate(theta)
-    protected fun rotate(theta: Int) = graphics.rotate(theta.toDouble())
 
-
-    protected fun line(a: Point, b: Point) {
+    fun line(a: Point, b: Point) {
         with(line) {
             x1 = a.x
             y1 = a.y
@@ -83,14 +82,21 @@ abstract class Drawing(width: Int, height: Int) {
         graphics.draw(line)
     }
 
+    fun polyLine(points: List<Point>) {
+        val path = GeneralPath()
+        path.moveTo(points[0].x, points[0].y)
+        for (p in points.asSequence().drop(1)) path.lineTo(p.x, p.y)
+        graphics.draw(path)
+    }
+
 
     //region circle
 
-    protected fun drawCircle(centre: Point, radius: Double) = graphics.draw(calcEllipse(centre, radius))
-    protected fun drawCircle(centre: Point, radius: Int) = drawCircle(centre, radius.toDouble())
+    fun drawCircle(centre: Point, radius: Double) = graphics.draw(calcEllipse(centre, radius))
+    fun drawCircle(centre: Point, radius: Int) = drawCircle(centre, radius.toDouble())
 
-    protected fun fillCircle(centre: Point, radius: Double) = graphics.fill(calcEllipse(centre, radius))
-    protected fun fillCircle(centre: Point, radius: Int) = fillCircle(centre, radius.toDouble())
+    fun fillCircle(centre: Point, radius: Double) = graphics.fill(calcEllipse(centre, radius))
+    fun fillCircle(centre: Point, radius: Int) = fillCircle(centre, radius.toDouble())
 
     private fun calcEllipse(centre: Point, radius: Double) = ellipse.apply {
         x = centre.x - radius
@@ -104,8 +110,8 @@ abstract class Drawing(width: Int, height: Int) {
 
     // region rectangle
 
-    protected fun drawRectangle(a: Point, b: Point) = graphics.draw(calcRect(a, b))
-    protected fun fillRectangle(a: Point, b: Point) = graphics.fill(calcRect(a, b))
+    fun drawRectangle(a: Point, b: Point) = graphics.draw(calcRect(a, b))
+    fun fillRectangle(a: Point, b: Point) = graphics.fill(calcRect(a, b))
 
     private fun calcRect(a: Point, b: Point) = rectangle.apply {
         this.x = min(a.x, b.x)
@@ -125,7 +131,7 @@ abstract class Drawing(width: Int, height: Int) {
         graphics.transform = t
     }
 
-    fun clear(color: Color)  {
+    fun clear(color: Color) {
         graphics.background = color
         clear()
     }
@@ -152,22 +158,22 @@ abstract class Drawing(width: Int, height: Int) {
     abstract fun draw()
 
 
-    protected fun stroke(width: Double) = graphics.setStroke(BasicStroke(width.toFloat()));
-    protected fun stroke(width: Int) = graphics.setStroke(BasicStroke(width.toFloat()));
+    fun stroke(width: Double) = graphics.setStroke(BasicStroke(width.toFloat()));
+    fun stroke(width: Int) = graphics.setStroke(BasicStroke(width.toFloat()));
 
-    protected fun opacity(value: Double) = setAlpha((value.coerceIn(0.0, 1.0) * 255).toInt());
-    protected fun opacity(value: Int) = setAlpha(value.coerceIn(0, 1) * 255);
+    fun opacity(value: Double) = setAlpha((value.coerceIn(0.0, 1.0) * 255).toInt());
+    fun opacity(value: Int) = setAlpha(value.coerceIn(0, 1) * 255);
 
-    protected fun blendingMode(blendingMode: BlendingMode) {
+    fun blendingMode(blendingMode: BlendingMode) {
         graphics.composite = blendingMode.composite
     }
 
-    private fun setAlpha(alpha: Int) {
+    fun setAlpha(alpha: Int) {
         val c = graphics.color
         graphics.color = Color(c.red, c.green, c.blue, alpha)
     }
 
-    protected fun color(c: Color) = setRGB(c.red, c.green, c.blue)
+    fun color(c: Color) = setRGB(c.red, c.green, c.blue)
 
     private fun setRGB(red: Int, green: Int, blue: Int) {
         val c = graphics.color
@@ -183,15 +189,14 @@ abstract class Drawing(width: Int, height: Int) {
 
     private val transformStack: Deque<AffineTransform> = ArrayDeque()
 
-    protected fun pushTransform() = transformStack.push(graphics.transform)
+    fun pushTransform() = transformStack.push(graphics.transform)
 
-    protected fun popTransform() {
+    fun popTransform() {
         if (transformStack.isNotEmpty()) graphics.transform = transformStack.pop()
     }
 
     fun drawShape(shape: Shape) = graphics.draw(shape.path)
     fun fillShape(shape: Shape) = graphics.fill(shape.path)
-
 
 }
 

@@ -19,11 +19,14 @@ data class Point(val x: Double, val y: Double) {
 
     infix fun distanceTo(other: Point) = hypot(x - other.x, y - other.y)
 
+    infix fun dot(other:Point) = x * other.x + y * other.y
+
+    val perpendicular get() = Point(-y, x)
     val magnitude get() = hypot(x, y)
+    val normalized get() = this / magnitude
 
     companion object {
         val ZERO = Point(0, 0)
     }
+
 }
-
-
