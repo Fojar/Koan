@@ -1,5 +1,7 @@
 package koan.gui
 
+import koan.Drawing
+import koan.DrawingClassLoader
 import java.io.File
 import java.io.IOException
 import java.nio.file.*
@@ -43,7 +45,7 @@ class DrawingTreeView(changeHandler: (className: String) -> Unit) : JScrollPane(
     fun selectFirstDrawing() {
         val root = tree.model.root as DefaultMutableTreeNode
         val leaf = findFirstLeaf(root)
-        if (leaf != null) tree.setSelectionPath(TreePath(leaf.path));
+        if (leaf != null) tree.selectionPath = TreePath(leaf.path);
     }
 
     fun findFirstLeaf(node: DefaultMutableTreeNode): DefaultMutableTreeNode? {
@@ -76,13 +78,22 @@ class DrawingTreeView(changeHandler: (className: String) -> Unit) : JScrollPane(
         // A stack of directory nodes built as we walk the file tree.
         val dirNodes = ArrayDeque<DefaultMutableTreeNode>()
 
+        val classLoader = DrawingClassLoader(javaClass.classLoader)
+
         Files.walkFileTree(Resources.drawingsPath, emptySet(), 3, object : SimpleFileVisitor<Path>() {
 
             override fun visitFile(path: Path, attrs: BasicFileAttributes): FileVisitResult {
                 val filename = path.fileName.toString()
                 if (attrs.isRegularFile && !filename.contains('$') && filename.endsWith(".class")) {
+
+                    // Only add drawings to the list of classes.
                     val userObject = DrawingClassNode(path)
-                    dirNodes.peek().add(DefaultMutableTreeNode(userObject))
+                    val className = "drawings.${userObject.qualifiedClassName}"
+                    val loadedClass = classLoader.loadClass(className)
+
+                    if (Drawing::class.java.isAssignableFrom(loadedClass)) {
+                        dirNodes.peek().add(DefaultMutableTreeNode(userObject))
+                    }
                 }
                 return FileVisitResult.CONTINUE
             }
