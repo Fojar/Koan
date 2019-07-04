@@ -1,5 +1,6 @@
 package koan
 
+
 import java.awt.*
 import java.awt.event.KeyEvent
 import java.awt.geom.*
@@ -83,10 +84,25 @@ abstract class Drawing(width: Int, height: Int) {
     }
 
     fun polyLine(points: List<Point>) {
+        val path = pointsToPath(points)
+        graphics.draw(path)
+    }
+
+    fun drawPolygon(points: List<Point>) {
+        val path = pointsToPath(points).apply { closePath() }
+        graphics.draw(path)
+    }
+
+    fun fillPolygon(points: List<Point>) {
+        val path = pointsToPath(points).apply { closePath() }
+        graphics.fill(path)
+    }
+
+    private fun pointsToPath(points: List<Point>): GeneralPath {
         val path = GeneralPath()
         path.moveTo(points[0].x, points[0].y)
         for (p in points.asSequence().drop(1)) path.lineTo(p.x, p.y)
-        graphics.draw(path)
+        return path
     }
 
 
@@ -158,8 +174,11 @@ abstract class Drawing(width: Int, height: Int) {
     abstract fun draw()
 
 
-    fun stroke(width: Double) = graphics.setStroke(BasicStroke(width.toFloat()));
-    fun stroke(width: Int) = graphics.setStroke(BasicStroke(width.toFloat()));
+    fun stroke(width: Double) =
+        graphics.setStroke(BasicStroke(width.toFloat(), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
+
+    fun stroke(width: Int) =
+        graphics.setStroke(BasicStroke(width.toFloat(), BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND));
 
     fun opacity(value: Double) = setAlpha((value.coerceIn(0.0, 1.0) * 255).toInt());
     fun opacity(value: Int) = setAlpha(value.coerceIn(0, 1) * 255);
