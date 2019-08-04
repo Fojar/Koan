@@ -6,10 +6,16 @@ fun List<Point>.closedCrinkled(crinkliness: Real): List<Point> {
     return crinkle(this, this.size, crinkliness)
 }
 
-fun List<Point>.openCrinkled(crinkliness: Real): List<Point> {
-    return crinkle(this, this.size - 1, crinkliness).apply {
-        add(this.last())
+fun List<Point>.openCrinkled(crinkliness: Real, repetitions: Int = 1): List<Point> {
+
+    var result = this as MutableList
+
+    repeat(repetitions) {
+        result = crinkle(result, this.size - 1, crinkliness).also {
+            it.add(result.last())
+        }
     }
+    return result
 }
 
 private fun crinkle(points: List<Point>, n: Int, crinkliness: Real): MutableList<Point> {
