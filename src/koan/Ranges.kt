@@ -18,3 +18,8 @@ infix fun ClosedRange<Double>.step(step: Double): Iterable<Double> {
 operator fun Int.rangeTo(max: Double) = this.toDouble()..max
 operator fun Double.rangeTo(max: Int) = this..max.toDouble()
 
+
+data class SemiOpenRange(val start: Real, val endExclusive: Real)
+
+infix fun Real.until(endExclusive: Real) = SemiOpenRange(this, endExclusive)
+operator fun SemiOpenRange.contains(x: Real) = start <= x && x < endExclusive
