@@ -9,6 +9,7 @@ import java.awt.event.KeyEvent
 import javax.swing.JComponent
 import javax.swing.JFrame
 import javax.swing.SwingUtilities
+import kotlin.math.roundToInt
 
 class Canvas(val frame: JFrame) : JComponent() {
 
@@ -19,7 +20,10 @@ class Canvas(val frame: JFrame) : JComponent() {
     private var currentDrawing: Drawing = defaultDrawing
         set(drawing) {
             field = drawing
-            val d = Dimension(drawing.canvas.width, drawing.canvas.height)
+
+            val width = (drawing.canvas.width * SCALE_FACTOR).roundToInt()
+            val height = (drawing.canvas.height * SCALE_FACTOR).roundToInt()
+            val d = Dimension(width, height)
             size = d
             preferredSize = d
             drawing.resetInternal()
@@ -102,8 +106,8 @@ class Canvas(val frame: JFrame) : JComponent() {
                 height,
                 0,
                 0,
-                currentDrawing.canvas.width * currentDrawing.sizeFactor,
-                currentDrawing.canvas.height * currentDrawing.sizeFactor,
+                currentDrawing.canvas.width * RESOLUTION_MULTIPLER,
+                currentDrawing.canvas.height * RESOLUTION_MULTIPLER,
                 null
             );
         }

@@ -24,8 +24,6 @@ abstract class Drawing(width: Int, height: Int) {
 
     val canvas: CanvasSpec = CanvasSpec(width, height)
 
-    val sizeFactor: Int = 1
-
     val image: BufferedImage
 
     private var customTransform: AffineTransform
@@ -39,9 +37,12 @@ abstract class Drawing(width: Int, height: Int) {
 
     init {
 
-        image = BufferedImage(width * sizeFactor, height * sizeFactor, BufferedImage.TYPE_INT_ARGB)
+        image = BufferedImage(
+            width * RESOLUTION_MULTIPLER, height * RESOLUTION_MULTIPLER,
+            BufferedImage.TYPE_INT_ARGB
+        )
         graphics = (image.graphics as Graphics2D).apply {
-            scale(sizeFactor.toDouble(), sizeFactor.toDouble())
+            scale(RESOLUTION_MULTIPLER.toDouble(), RESOLUTION_MULTIPLER.toDouble())
             setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON)
             setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_PURE)
 

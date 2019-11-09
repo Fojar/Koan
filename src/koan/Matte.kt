@@ -2,12 +2,13 @@ package koan
 
 import javax.swing.border.AbstractBorder
 import java.awt.*
+import kotlin.math.roundToInt
 
 
 class Matte() : AbstractBorder() {
 
-    val gap = 60
-    val frameThickness = 10
+    val gap = (60 * SCALE_FACTOR).roundToInt()
+    val frameThickness = (10 * SCALE_FACTOR).roundToInt()
 
     val highlight = Color(250, 250, 250)
     val shadow = Color(230, 230, 230)
