@@ -163,6 +163,10 @@ abstract class Drawing(width: Int, height: Int) {
         customTransform = graphics.transform
     }
 
+    fun resetTransform() {
+        graphics.transform = originalTransform
+    }
+
     open fun reset() {
         clear()
     }
