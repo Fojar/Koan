@@ -11,131 +11,134 @@ import javax.swing.JFrame
 import javax.swing.SwingUtilities
 import kotlin.math.roundToInt
 
-class Canvas(val frame: JFrame) : JComponent() {
+class Canvas(private val frame: JFrame) : JComponent() {
 
-    private var currentDrawingClassName: String = ""
+	private val defaultDrawing = DefaultDrawing()
 
-    private val defaultDrawing = DefaultDrawing()
+	var scaleFactor = 1.0
+		set(value) {
+			field = value
+			updateScale()
+		}
 
-    private var currentDrawing: Drawing = defaultDrawing
-        set(drawing) {
-            field = drawing
+	private var currentDrawingClassName: String = ""
 
-            val width = (drawing.canvas.width * SCALE_FACTOR).roundToInt()
-            val height = (drawing.canvas.height * SCALE_FACTOR).roundToInt()
-            val d = Dimension(width, height)
-            size = d
-            preferredSize = d
-            drawing.resetInternal()
-            repaint()
+	private var currentDrawing: Drawing = defaultDrawing
+		set(drawing) {
+			field = drawing
 
-            SwingUtilities.invokeLater {
-                drawing.drawInternal()
-                repaint()
-            }
-        }
+			drawing.resetInternal()
+			updateScale()
 
-    private val parentClassLoader = javaClass.classLoader
+			SwingUtilities.invokeLater {
+				drawing.drawInternal()
+				repaint()
+			}
+		}
 
-    init {
+	private val parentClassLoader = javaClass.classLoader
 
-        reloadDrawing()
+	init {
 
-        addKeyListener(object : KeyAdapter() {
-            override fun keyPressed(e: KeyEvent) {
+		addKeyListener(object : KeyAdapter() {
+			override fun keyPressed(e: KeyEvent) {
 
-                when (e.keyCode) {
-                    KeyEvent.VK_BACK_SPACE -> reloadDrawing()
-                    KeyEvent.VK_ENTER -> resetDrawing()
-                    KeyEvent.VK_SPACE -> drawDrawing()
-                    else -> {
-                        if (currentDrawing.keyPressed(e)) {
-                            currentDrawing.drawInternal()
-                            repaint()
-                        }
-                    }
-                }
-            }
-        })
+				when (e.keyCode) {
+					KeyEvent.VK_BACK_SPACE -> reloadDrawing()
+					KeyEvent.VK_ENTER -> resetDrawing()
+					KeyEvent.VK_SPACE -> drawDrawing()
+					else -> {
+						if (currentDrawing.keyPressed(e)) {
+							currentDrawing.drawInternal()
+							repaint()
+						}
+					}
+				}
+			}
+		})
 
-    }
+	}
 
 
-    fun saveDrawing() {
-        currentDrawing.save()
-    }
+	private fun updateScale() {
+		val windowWidth = (currentDrawing.canvas.width * scaleFactor).roundToInt()
+		val windowHeight = (currentDrawing.canvas.height * scaleFactor).roundToInt()
+		val newSize = Dimension(windowWidth, windowHeight)
 
-    fun drawDrawing() {
-        currentDrawing.drawInternal()
-        repaint()
-    }
+		if (newSize != size) {
+			size = newSize
+			preferredSize = size
+			frame.pack()
+		}
+		repaint()
+	}
 
-    fun resetDrawing() {
-        currentDrawing.resetInternal()
-        drawDrawing()
-    }
+	fun saveDrawing() {
+		currentDrawing.save()
+	}
 
-    fun reloadDrawing() {
+	fun drawDrawing() {
+		currentDrawing.drawInternal()
+		repaint()
+	}
 
-        val drawing = getNewCurrentDrawing()
+	fun resetDrawing() {
+		currentDrawing.resetInternal()
+		drawDrawing()
+	}
 
-        val drawingName = currentDrawingClassName.replace('.', '/')
+	fun reloadDrawing() {
 
-        if (drawing != null) {
-            clearConsole()
-            println("Drawing $drawingName loaded.")
-            frame.title = "Koan drawing: $drawingName"
-            currentDrawing = drawing
-        } else {
-            frame.title = "Koan drawing: $drawingName [Invalid]"
-            currentDrawing = defaultDrawing
-        }
-        frame.pack()
-    }
+		val drawing = getNewCurrentDrawing()
+		val drawingName = currentDrawingClassName.replace('.', '/')
 
-    override fun paintComponent(g: Graphics) {
+		if (drawing != null) {
+			clearConsole()
+			println("Drawing $drawingName loaded.")
+			frame.title = "Koan drawing: $drawingName"
+			currentDrawing = drawing
+		} else {
+			frame.title = "Koan drawing: $drawingName [Invalid]"
+			currentDrawing = defaultDrawing
+		}
+		frame.pack()
+	}
 
-        (g as Graphics2D).apply {
-            setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+	override fun paintComponent(g: Graphics) {
 
-            drawImage(
-                currentDrawing.image,
-                0,
-                0,
-                width,
-                height,
-                0,
-                0,
-                currentDrawing.canvas.width * RESOLUTION_MULTIPLER,
-                currentDrawing.canvas.height * RESOLUTION_MULTIPLER,
-                null
-            );
-        }
-    }
+		(g as Graphics2D).apply {
+			setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
 
-    fun loadDrawing(className: String) {
-        currentDrawingClassName = className
-        reloadDrawing()
-    }
+			drawImage(
+				currentDrawing.image,
+				0,
+				0,
+				width,
+				height,
+				0,
+				0,
+				currentDrawing.image.width,
+				currentDrawing.image.height,
+				null
+			);
+		}
+	}
 
-    fun getNewCurrentDrawing(): Drawing? {
+	fun loadDrawing(className: String) {
+		currentDrawingClassName = className
+		reloadDrawing()
+	}
 
-        try {
+	fun getNewCurrentDrawing() = try {
 
-            val drawingClass = DrawingClassLoader(parentClassLoader)
-                .loadClass("drawings.$currentDrawingClassName")
+		val drawingClass = DrawingClassLoader(parentClassLoader)
+			.loadClass("drawings.$currentDrawingClassName")
 
-            val thing = drawingClass.getConstructor().newInstance()
+		drawingClass.getConstructor().newInstance() as? Drawing
 
-            if (thing is Drawing) {
-                return thing
-            }
-        } catch (ex: Exception) {
-            ex.cause?.printStackTrace()
-        }
-
-        return null
-    }
-
+	} catch (ex: Exception) {
+		ex.cause?.printStackTrace()
+		null
+	}
 
 }
