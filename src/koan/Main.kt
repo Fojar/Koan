@@ -38,7 +38,7 @@ fun main() {
 
 		val panel = JPanel().apply {
 			layout = BoxLayout(this, BoxLayout.PAGE_AXIS)
-			background = Color(240, 240, 240)
+			background = Color(220, 220, 220)
 			add(canvas, BorderLayout.CENTER)
 			border = matte
 		}

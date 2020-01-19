@@ -10,8 +10,8 @@ class Matte() : AbstractBorder() {
 	private var gap = 60
 	private var frameThickness = 10
 
-	val highlight = Color(250, 250, 250)
-	val shadow = Color(230, 230, 230)
+	val highlight = Color(240, 240, 240)
+	val shadow = Color(200, 200, 200)
 
 
 	fun updateScale(scaleFactor: Real) {
