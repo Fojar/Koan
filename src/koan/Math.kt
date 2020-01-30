@@ -35,6 +35,10 @@ fun sum(vararg funcs: (Double) -> Double): (Double) -> Double {
 	return { z: Double -> funcs.sumByDouble { wf -> wf(z) } }
 }
 
+fun sum(funcs: List<(Double) -> Double> ): (Double) -> Double {
+	return { z: Double -> funcs.sumByDouble { wf -> wf(z) } }
+}
+
 // This version of the SineWave takes a lambda for the phase parameter, allowing it to be animated over time.
 fun PhasingSineWave(cycleScaleFunc: Double, amplitude: Double, phaseFunc: (Double) -> Double): (Double) -> Double {
 	return { sin(phaseFunc(it) + cycleScaleFunc * it) * amplitude }
