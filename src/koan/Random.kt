@@ -40,3 +40,5 @@ fun rand(min: Double, max: Int) = RNG.nextDouble(min, max.toDouble())
 fun rint(until: Int) = RNG.nextInt(until)
 fun rint(from: Int, until: Int) = RNG.nextInt(from, until)
 fun rint(range: IntRange) = RNG.nextInt(range)
+
+fun randBoolean() = RNG.nextBoolean()
