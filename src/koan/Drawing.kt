@@ -2,6 +2,8 @@ package koan
 
 
 import java.awt.*
+import java.awt.datatransfer.*
+import java.awt.datatransfer.DataFlavor.imageFlavor
 import java.awt.event.KeyEvent
 import java.awt.geom.*
 import java.awt.image.BufferedImage
@@ -9,7 +11,7 @@ import java.io.File
 import java.util.*
 import javax.imageio.ImageIO
 import kotlin.math.*
-import java.util.Deque
+
 
 data class CanvasSpec(val width: Int, val height: Int) {
 
@@ -211,10 +213,16 @@ abstract class Drawing(val width: Int, val height: Int) {
 		graphics.color = Color(red, green, blue, c.alpha)
 	}
 
+	fun copyToClipboard() {
+		val imgSel = ImageSelection(image)
+		Toolkit.getDefaultToolkit().systemClipboard.setContents(imgSel, null)
+		println("Drawing copied to clipboard.")
+	}
 
 	fun save() {
-		val filename = this.javaClass.simpleName
+		val filename = "${javaClass.simpleName}-$randomSeed.png"
 		ImageIO.write(image, "png", File("gallery/$filename-$randomSeed.png"))
+		println("Drawing saved to $filename.")
 	}
 
 
@@ -229,6 +237,19 @@ abstract class Drawing(val width: Int, val height: Int) {
 	fun drawShape(shape: Shape) = graphics.draw(shape.path)
 	fun fillShape(shape: Shape) = graphics.fill(shape.path)
 
+}
+
+class ImageSelection(private val image: Image) : Transferable {
+
+	private val flavors = arrayOf(imageFlavor)
+
+	override fun getTransferDataFlavors() = flavors
+
+	override fun isDataFlavorSupported(flavor: DataFlavor) = flavor == imageFlavor
+
+	override fun getTransferData(flavor: DataFlavor) =
+		if (flavor == imageFlavor) image
+		else throw UnsupportedFlavorException(flavor)
 }
 
 

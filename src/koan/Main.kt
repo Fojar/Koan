@@ -90,7 +90,7 @@ fun main() {
 		contentPane.add(tabPane, BorderLayout.CENTER)
 
 		val buttonsPanel = JPanel().apply {
-			layout = GridLayout(4, 1)
+			layout = GridLayout(5, 1)
 
 			addButton("<html><center><h2>Reload</h2>After code is changed</center></html>") {
 				canvas.reloadDrawing()
@@ -100,6 +100,9 @@ fun main() {
 			}
 			addButton("<html><center><h2>Draw</h2>Only calls draw</center></html>") {
 				canvas.drawDrawing()
+			}
+			addButton("<html><center><h2>Copy Image</h2>To clipboard</center></html>") {
+				canvas.copyToClipboard()
 			}
 			addButton("<html><center><h2>Save Image</h2>Into gallery folder</center></html>") {
 				canvas.saveDrawing()

@@ -73,20 +73,6 @@ class Canvas(private val frame: JFrame) : JComponent() {
 		repaint()
 	}
 
-	fun saveDrawing() {
-		currentDrawing.save()
-	}
-
-	fun drawDrawing() {
-		currentDrawing.drawInternal()
-		repaint()
-	}
-
-	fun resetDrawing() {
-		currentDrawing.resetInternal()
-		drawDrawing()
-	}
-
 	fun reloadDrawing() {
 
 		val drawing = getNewCurrentDrawing()
@@ -103,6 +89,25 @@ class Canvas(private val frame: JFrame) : JComponent() {
 		}
 		frame.pack()
 	}
+
+	fun resetDrawing() {
+		currentDrawing.resetInternal()
+		drawDrawing()
+	}
+
+	fun drawDrawing() {
+		currentDrawing.drawInternal()
+		repaint()
+	}
+
+	fun copyToClipboard() {
+		currentDrawing.copyToClipboard()
+	}
+
+	fun saveDrawing() {
+		currentDrawing.save()
+	}
+
 
 	override fun paintComponent(g: Graphics) {
 
