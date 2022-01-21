@@ -1,10 +1,10 @@
 plugins {
-    kotlin("jvm") version "1.4.10"
+    kotlin("jvm") version "1.6.10"
     application
 }
 
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 sourceSets {
@@ -17,5 +17,5 @@ dependencies {
 }
 
 application {
-    mainClassName = "koan.MainKt"
+    mainClass.set("koan.MainKt")
 }

@@ -47,6 +47,7 @@ class Canvas(private val frame: JFrame) : JComponent() {
 					KeyEvent.VK_BACK_SPACE -> reloadDrawing()
 					KeyEvent.VK_ENTER -> resetDrawing()
 					KeyEvent.VK_SPACE -> drawDrawing()
+					KeyEvent.VK_C -> if (e.isControlDown) copyToClipboard()
 					else -> {
 						if (currentDrawing.keyPressed(e)) {
 							currentDrawing.drawInternal()

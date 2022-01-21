@@ -32,11 +32,11 @@ fun wavelength(λ: Int) = wavelength(λ.toDouble())
 
 // Creates a function that yields the sum of the outputs of several other functions.
 fun sum(vararg funcs: (Double) -> Double): (Double) -> Double {
-	return { z: Double -> funcs.sumByDouble { wf -> wf(z) } }
+	return { z: Double -> funcs.sumOf { wf -> wf(z) } }
 }
 
 fun sum(funcs: List<(Double) -> Double> ): (Double) -> Double {
-	return { z: Double -> funcs.sumByDouble { wf -> wf(z) } }
+	return { z: Double -> funcs.sumOf { wf -> wf(z) } }
 }
 
 // This version of the SineWave takes a lambda for the phase parameter, allowing it to be animated over time.
